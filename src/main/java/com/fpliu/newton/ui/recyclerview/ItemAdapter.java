@@ -1,0 +1,238 @@
+package com.fpliu.newton.ui.recyclerview;
+
+import android.support.v7.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
+/**
+ * RecyclerView的万能Adapter
+ *
+ * @author 792793182@qq.com 2017-07-18.
+ */
+public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends RecyclerView.Adapter<H> implements List<T> {
+
+    //数据项集合
+    private List<T> mItems;
+
+    /**
+     * 构造方法
+     *
+     * @param items 要显示的项的数据列表
+     */
+    public ItemAdapter(List<T> items) {
+        mItems = items;
+    }
+
+    public void setItems(List<T> items) {
+        mItems = items;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemCount() {
+        return mItems == null ? 0 : mItems.size();
+    }
+
+    public List<T> getItems() {
+        return mItems;
+    }
+
+    public T getItem(int position) {
+        return mItems == null ? null : mItems.get(position);
+    }
+
+    @Override
+    public void add(int location, T object) {
+        if (object == null) {
+            return;
+        }
+
+        if (mItems == null) {
+            mItems = new ArrayList<T>();
+        }
+
+        mItems.add(location, object);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean add(T object) {
+        if (mItems == null) {
+            mItems = new ArrayList<>();
+        }
+
+        boolean flag = mItems.add(object);
+        notifyDataSetChanged();
+        return flag;
+    }
+
+    @Override
+    public boolean addAll(int location, Collection<? extends T> collection) {
+        if (collection == null) {
+            return false;
+        }
+
+        if (mItems == null) {
+            mItems = new ArrayList<T>();
+        }
+
+        boolean flag = mItems.addAll(location, collection);
+        notifyDataSetChanged();
+        return flag;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends T> collection) {
+        if (collection == null) {
+            return false;
+        }
+
+        if (mItems == null) {
+            mItems = new ArrayList<T>();
+        }
+
+        boolean flag = mItems.addAll(collection);
+        notifyDataSetChanged();
+        return flag;
+    }
+
+    @Override
+    public void clear() {
+        if (mItems != null) {
+            mItems.clear();
+            notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public boolean contains(Object object) {
+        return mItems == null ? false : mItems.contains(object);
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> collection) {
+        return mItems == null ? false : mItems.containsAll(collection);
+    }
+
+    @Override
+    public T get(int location) {
+        return mItems == null ? null : mItems.get(location);
+    }
+
+    @Override
+    public int indexOf(Object object) {
+        return mItems == null ? -1 : mItems.indexOf(object);
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return mItems == null ? null : mItems.iterator();
+    }
+
+    @Override
+    public int lastIndexOf(Object object) {
+        return mItems == null ? -1 : mItems.lastIndexOf(object);
+    }
+
+    @Override
+    public ListIterator<T> listIterator() {
+        return mItems == null ? null : mItems.listIterator();
+    }
+
+    @Override
+    public ListIterator<T> listIterator(int location) {
+        return mItems == null ? null : mItems.listIterator(location);
+    }
+
+    @Override
+    public T remove(int location) {
+        if (mItems == null) {
+            return null;
+        }
+
+        T t = mItems.remove(location);
+        notifyDataSetChanged();
+        return t;
+    }
+
+    @Override
+    public boolean remove(Object object) {
+        if (mItems == null) {
+            return false;
+        }
+
+        boolean flag = mItems.remove(object);
+        notifyDataSetChanged();
+        return flag;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> collection) {
+        if (collection == null) {
+            return false;
+        }
+
+        if (mItems == null) {
+            return false;
+        }
+
+        boolean flag = mItems.removeAll(collection);
+        notifyDataSetChanged();
+        return flag;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> collection) {
+        if (collection == null) {
+            return false;
+        }
+
+        if (mItems == null) {
+            return false;
+        }
+
+        boolean flag = mItems.retainAll(collection);
+        notifyDataSetChanged();
+        return flag;
+    }
+
+    @Override
+    public T set(int location, T object) {
+        if (mItems == null) {
+            return null;
+        }
+
+        T t = mItems.set(location, object);
+        notifyDataSetChanged();
+        return t;
+    }
+
+    @Override
+    public int size() {
+        return mItems == null ? 0 : mItems.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return mItems.isEmpty();
+    }
+
+    @Override
+    public List<T> subList(int start, int end) {
+        return mItems == null ? null : mItems.subList(start, end);
+    }
+
+    @Override
+    public Object[] toArray() {
+        return mItems == null ? null : mItems.toArray();
+    }
+
+    @Override
+    public <E> E[] toArray(E[] array) {
+        return mItems == null ? null : mItems.toArray(array);
+    }
+}

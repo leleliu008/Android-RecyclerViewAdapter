@@ -374,10 +374,10 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
     }
 
     /**
-     * Enable a view.
+     * 设置是否可操作
      *
-     * @param enabled state
-     * @return self
+     * @param enabled 是否可操作
+     * @return 本类的实例
      */
     public SubClass enabled(boolean enabled) {
         if (view != null) {
@@ -387,10 +387,10 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
     }
 
     /**
-     * Set checked state of a Checkable.
+     * 设置是否可选择
      *
-     * @param checked state
-     * @return self
+     * @param checked 是否可选择
+     * @return 本类的实例
      */
     public SubClass checked(boolean checked) {
         if (view instanceof Checkable) {
@@ -401,9 +401,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
     }
 
     /**
-     * Get checked state of a Checkable.
-     *
-     * @return checked
+     * 是否是选中状态
      */
     public boolean isChecked() {
         if (view instanceof Checkable) {
@@ -414,10 +412,10 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
     }
 
     /**
-     * Set clickable for a view.
+     * 设置是否可点击
      *
-     * @param clickable
-     * @return self
+     * @param clickable 是否可点击
+     * @return 本类的实例
      */
     public SubClass clickable(boolean clickable) {
         if (view != null) {
@@ -805,8 +803,8 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * 设置控件的宽度
      *
      * @param width 高度，可以是具体数值，单位：dip或者px，也可以是ViewGroup.LayoutParams.FILL_PARENT、ViewGroup.LayoutParams.WRAP_CONTENT、ViewGroup.LayoutParams.MATCH_PARENT
+     * @param isDIP 单位是否是dip，否则是px
      * @return 本类的实例
-     * @isDIP 单位是否是dip，否则是px
      */
     public SubClass width(int width, boolean isDIP) {
         size(true, width, isDIP);
@@ -817,8 +815,8 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * 设置控件的高度
      *
      * @param height 高度，可以是具体数值，单位：dip或者px，也可以是ViewGroup.LayoutParams.FILL_PARENT、ViewGroup.LayoutParams.WRAP_CONTENT、ViewGroup.LayoutParams.MATCH_PARENT
+     * @param isDIP  单位是否是dip，否则是px
      * @return 本类的实例
-     * @isDIP 单位是否是dip，否则是px
      */
     public SubClass height(int height, boolean isDIP) {
         size(false, height, isDIP);

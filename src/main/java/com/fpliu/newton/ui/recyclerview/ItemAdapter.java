@@ -86,7 +86,7 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
         }
 
         mItems.add(location, object);
-        notifyDataSetChanged();
+        notifyItemInserted(location);
     }
 
     @Override
@@ -96,7 +96,9 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
         }
 
         boolean flag = mItems.add(object);
-        notifyDataSetChanged();
+        if (flag) {
+            notifyItemInserted(size() - 1);
+        }
         return flag;
     }
 
@@ -111,7 +113,9 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
         }
 
         boolean flag = mItems.addAll(location, collection);
-        notifyDataSetChanged();
+        if (flag) {
+            notifyItemRangeInserted(location, location + collection.size() - 1);
+        }
         return flag;
     }
 
@@ -126,7 +130,9 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
         }
 
         boolean flag = mItems.addAll(collection);
-        notifyDataSetChanged();
+        if (flag) {
+            notifyItemRangeInserted(size() - collection.size(), size());
+        }
         return flag;
     }
 
@@ -134,7 +140,7 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
     public void clear() {
         if (mItems != null) {
             mItems.clear();
-            notifyDataSetChanged();
+            notifyItemMoved(0, size() - 1);
         }
     }
 
@@ -185,7 +191,7 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
         }
 
         T t = mItems.remove(location);
-        notifyDataSetChanged();
+        notifyItemRemoved(location);
         return t;
     }
 
@@ -196,7 +202,7 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
         }
 
         boolean flag = mItems.remove(object);
-        notifyDataSetChanged();
+        notifyItemRemoved(indexOf(object));
         return flag;
     }
 
@@ -237,7 +243,7 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
         }
 
         T t = mItems.set(location, object);
-        notifyDataSetChanged();
+        notifyItemChanged(location);
         return t;
     }
 

@@ -1,6 +1,7 @@
 package com.fpliu.newton.ui.recyclerview;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
@@ -274,12 +275,26 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      */
     public SubClass image(int resId) {
         if (view instanceof ImageView) {
-            ImageView iv = (ImageView) view;
+            ImageView imageView = (ImageView) view;
             if (resId == 0) {
-                iv.setImageBitmap(null);
+                imageView.setImageBitmap(null);
             } else {
-                iv.setImageResource(resId);
+                imageView.setImageResource(resId);
             }
+        }
+        return self();
+    }
+
+    /**
+     * 给ImageView设置图片
+     *
+     * @param bitmap 位图
+     * @return 本类的实例
+     */
+    public SubClass image(Bitmap bitmap) {
+        if (view instanceof ImageView) {
+            ImageView imageView = (ImageView) view;
+            imageView.setImageBitmap(bitmap);
         }
         return self();
     }
@@ -481,6 +496,19 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
     }
 
     /**
+     * 设置控件的背景
+     *
+     * @param bg 背景
+     * @return 本类的实例
+     */
+    public SubClass background(Drawable bg) {
+        if (view != null) {
+            view.setBackgroundDrawable(bg);
+        }
+        return self();
+    }
+
+    /**
      * 设置控件的背景颜色
      *
      * @param color 颜色
@@ -491,15 +519,6 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
             view.setBackgroundColor(color);
         }
         return self();
-    }
-
-    /**
-     * Checks if the current view exist.
-     *
-     * @return true, if is exist
-     */
-    public boolean isExist() {
-        return view != null;
     }
 
     /**

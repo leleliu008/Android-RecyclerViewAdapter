@@ -49,6 +49,7 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
             itemView.setTag(R.id.id_recycler_view_item_position, position);
             itemView.setOnClickListener(this);
         }
+        onBindViewHolder(holder, position, getItem(position));
     }
 
     @Override

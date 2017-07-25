@@ -21,8 +21,6 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
 
     private OnItemClickListener<T, H> onItemClickListener;
 
-    private boolean isOnItemClickListenerSet;
-
     /**
      * 构造方法
      *
@@ -39,15 +37,13 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
 
     public void setOnItemClickListener(OnItemClickListener<T, H> onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
-        isOnItemClickListenerSet = true;
     }
 
     public abstract void onBindViewHolder(H holder, int position, T item);
 
     @Override
     public void onBindViewHolder(H holder, int position) {
-        if (isOnItemClickListenerSet && onItemClickListener != null) {
-            isOnItemClickListenerSet = false;
+        if (onItemClickListener != null) {
             View itemView = holder.getItemView();
             itemView.setTag(R.id.id_recycler_view_item_holder, holder);
             itemView.setTag(R.id.id_recycler_view_item_position, position);

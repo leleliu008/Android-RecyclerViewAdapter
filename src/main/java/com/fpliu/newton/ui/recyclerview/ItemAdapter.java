@@ -1,6 +1,7 @@
 package com.fpliu.newton.ui.recyclerview;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,10 +14,14 @@ import java.util.ListIterator;
  *
  * @author 792793182@qq.com 2017-07-18.
  */
-public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends RecyclerView.Adapter<H> implements List<T> {
+public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends RecyclerView.Adapter<H> implements List<T>, View.OnClickListener {
 
     //数据项集合
     private List<T> mItems;
+
+    private OnItemClickListener<T, H> onItemClickListener;
+
+    private boolean isOnItemClickListenerSet;
 
     /**
      * 构造方法
@@ -30,6 +35,34 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
     public void setItems(List<T> items) {
         mItems = items;
         notifyDataSetChanged();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener<T, H> onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+        isOnItemClickListenerSet = true;
+    }
+
+    public abstract void onBindViewHolder(H holder, int position, T item);
+
+    @Override
+    public void onBindViewHolder(H holder, int position) {
+        if (isOnItemClickListenerSet && onItemClickListener != null) {
+            isOnItemClickListenerSet = false;
+            View itemView = holder.getItemView();
+            itemView.setTag(R.id.id_recycler_view_item_holder, holder);
+            itemView.setTag(R.id.id_recycler_view_item_position, position);
+            itemView.setOnClickListener(this);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        H holder = (H) view.getTag(R.id.id_recycler_view_item_holder);
+        int position = (int) view.getTag(R.id.id_recycler_view_item_position);
+        T item = getItem(position);
+        if (onItemClickListener != null) {
+            onItemClickListener.onItemClick(holder, position, item);
+        }
     }
 
     @Override

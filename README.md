@@ -47,7 +47,16 @@ public class MyAdapter extends ItemAdapter<XXEntity, ItemViewHolder> {
     }
 }
 ```
-## 6、混淆
+
+## 6、引用
+在app模块的build.gradle中配置如下：
+```
+dependencies {
+    compile 'com.fpliu:Android-RecyclerViewAdapter:1.0.0'
+}
+```
+
+## 7、混淆
 不能混淆com.fpliu.newton.ui.recyclerview.ItemViewHolder，混淆脚本配置如下：
 ```
 -keep class com.fpliu.newton.ui.recyclerview.ItemViewHolder{

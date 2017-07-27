@@ -17,7 +17,7 @@
 ```
 public class MyAdapter extends ItemAdapter<XXEntity, ItemViewHolder> {
 
-    public RankingListAdapter(List<XXEntity> items) {
+    public MyAdapter(List<XXEntity> items) {
         super(items);
     }
 
@@ -28,15 +28,14 @@ public class MyAdapter extends ItemAdapter<XXEntity, ItemViewHolder> {
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position, XXEntity item) {
-        holder
-            .id(R.id.xx)
-            .text(item.getNickName())
+        holder.id(R.id.xx).text(item.getNickName())
             .compoundDrawablesWithIntrinsicBounds(R.drawable.xx, 0, 0, 0)
             .backgroundColor(Color.TRANSPARENT)
             .visibility(item.xx ? View.GONE : View.VISIBLE)
+            .id(R.id.yy).checked(isChecked)
         
-        ImageView imageView = holder.id(R.id.yy).tag(R.id.yy, position).getImageView();
-        Glide.with(context)
+        ImageView imageView = holder.id(R.id.zz).tag(R.id.zz, position).getImageView();
+        Glide.with(imageView.getContext())
                 .load(item.url)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.mipmap.head_default)

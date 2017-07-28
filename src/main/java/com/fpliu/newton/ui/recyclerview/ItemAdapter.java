@@ -54,8 +54,12 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
 
     @Override
     public void onClick(View view) {
+        Object positionObj = view.getTag(R.id.id_recycler_view_item_position);
+        if (positionObj == null) {
+            return;
+        }
         H holder = (H) view.getTag(R.id.id_recycler_view_item_holder);
-        int position = (int) view.getTag(R.id.id_recycler_view_item_position);
+        int position = (int) positionObj;
         T item = getItem(position);
         if (onItemClickListener != null) {
             onItemClickListener.onItemClick(holder, position, item);

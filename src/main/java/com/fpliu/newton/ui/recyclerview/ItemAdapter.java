@@ -135,7 +135,8 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
 
         boolean flag = mItems.addAll(collection);
         if (flag) {
-            notifyItemRangeInserted(size() - collection.size(), size());
+            int size = size();
+            notifyItemRangeInserted(size - collection.size(), size);
         }
         return flag;
     }
@@ -143,8 +144,12 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
     @Override
     public void clear() {
         if (mItems != null) {
+            int size = size();
+            if (size > 0) {
+                size -= 1;
+            }
             mItems.clear();
-            notifyItemMoved(0, size() - 1);
+            notifyItemMoved(0, size);
         }
     }
 

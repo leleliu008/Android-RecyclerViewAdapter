@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Checkable;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -402,6 +403,17 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
     }
 
     /**
+     * 设置是否被选中
+     *
+     * @param selected 是否被选中
+     * @return 本类的实例
+     */
+    public SubClass selected(boolean selected) {
+        view.setSelected(selected);
+        return self();
+    }
+
+    /**
      * 设置是否可选择
      *
      * @param checked 是否可选择
@@ -559,6 +571,13 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
             result = ((AdapterView<?>) view).getSelectedItemPosition();
         }
         return result;
+    }
+
+    public SubClass checkedChange(CompoundButton.OnCheckedChangeListener listener) {
+        if (view instanceof CompoundButton) {
+            ((CompoundButton) view).setOnCheckedChangeListener(listener);
+        }
+        return self();
     }
 
     /**

@@ -179,6 +179,20 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
     }
 
     /**
+     * 设置文本颜色
+     *
+     * @param colorId 文本的颜色的Id，使用R.color.xx
+     * @return 本类的实例
+     */
+    public SubClass textColorWithId(int colorId) {
+        if (view instanceof TextView) {
+            TextView tv = (TextView) view;
+            tv.setTextColor(tv.getContext().getResources().getColor(colorId));
+        }
+        return self();
+    }
+
+    /**
      * 设置文本的字体
      *
      * @param typeface 字体

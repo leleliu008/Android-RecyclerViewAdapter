@@ -263,7 +263,7 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
 
     @Override
     public boolean isEmpty() {
-        return mItems.isEmpty();
+        return mItems == null ? true : mItems.isEmpty();
     }
 
     @Override

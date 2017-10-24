@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -44,6 +45,8 @@ import java.lang.reflect.Constructor;
  */
 public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolder {
 
+    private static ImageLoader imageLoader;
+
     /**
      * 条目对应的视图
      */
@@ -57,6 +60,10 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
         super(itemView);
         this.itemView = itemView;
         this.widgetViews = new SparseArray<>();
+    }
+
+    public static void setImageLoader(ImageLoader imageLoader) {
+        ItemViewHolderAbs.imageLoader = imageLoader;
     }
 
     /**
@@ -282,6 +289,10 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
         return self();
     }
 
+    private void showInfo() {
+        Log.i(getClass().getSimpleName(), "imageLoader is not set");
+    }
+
     /**
      * 给ImageView设置图片资源
      *
@@ -291,10 +302,49 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
     public SubClass image(int resId) {
         if (view instanceof ImageView) {
             ImageView imageView = (ImageView) view;
-            if (resId == 0) {
-                imageView.setImageBitmap(null);
+            if (imageLoader == null) {
+                showInfo();
+                if (resId == 0) {
+                    imageView.setImageBitmap(null);
+                } else {
+                    imageView.setImageResource(resId);
+                }
             } else {
-                imageView.setImageResource(resId);
+                imageLoader.image(imageView, resId);
+            }
+        }
+        return self();
+    }
+
+    /**
+     * 给ImageView设置图片资源
+     *
+     * @param resId 图片资源的ID
+     * @return 本类的实例
+     */
+    public SubClass imageCircle(int resId) {
+        if (view instanceof ImageView) {
+            if (imageLoader == null) {
+                showInfo();
+            } else {
+                imageLoader.imageCircle((ImageView) view, resId);
+            }
+        }
+        return self();
+    }
+
+    /**
+     * 给ImageView设置图片资源
+     *
+     * @param resId 图片资源的ID
+     * @return 本类的实例
+     */
+    public SubClass imageRound(int resId, int radius) {
+        if (view instanceof ImageView) {
+            if (imageLoader == null) {
+                showInfo();
+            } else {
+                imageLoader.imageRoundRect((ImageView) view, resId, radius);
             }
         }
         return self();
@@ -310,6 +360,58 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
         if (view instanceof ImageView) {
             ImageView imageView = (ImageView) view;
             imageView.setImageBitmap(bitmap);
+        }
+        return self();
+    }
+
+    /**
+     * 显示图片 - 原形
+     *
+     * @param resource   文件路径、uri、url都可以
+     * @param defaultImg 默认图片
+     */
+    public SubClass image(String resource, int defaultImg) {
+        if (view instanceof ImageView) {
+            if (imageLoader == null) {
+                showInfo();
+            } else {
+                imageLoader.image((ImageView) view, resource, defaultImg);
+            }
+        }
+        return self();
+    }
+
+    /**
+     * 显示图片 - 圆形
+     *
+     * @param resource   文件路径、uri、url都可以
+     * @param defaultImg 默认图片
+     */
+    public SubClass imageCircle(String resource, int defaultImg) {
+        if (view instanceof ImageView) {
+            if (imageLoader == null) {
+                showInfo();
+            } else {
+                imageLoader.imageCircle((ImageView) view, resource, defaultImg);
+            }
+        }
+        return self();
+    }
+
+    /**
+     * 显示图片 - 圆角矩形
+     *
+     * @param radius     弧度
+     * @param resource   文件路径、uri、url都可以
+     * @param defaultImg 默认图片
+     */
+    public SubClass imageRound(String resource, int defaultImg, int radius) {
+        if (view instanceof ImageView) {
+            if (imageLoader == null) {
+                showInfo();
+            } else {
+                imageLoader.imageRoundRect((ImageView) view, resource, defaultImg, radius);
+            }
         }
         return self();
     }
@@ -365,6 +467,18 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
     public SubClass tag(Object tag) {
         if (view != null) {
             view.setTag(tag);
+        }
+        return self();
+    }
+
+    /**
+     * 给View设置一个标记，key是当前View的id
+     *
+     * @return 本类的实例
+     */
+    public SubClass tagWithCurrentId(Object tag) {
+        if (view != null) {
+            view.setTag(view.getId(), tag);
         }
         return self();
     }
@@ -1169,5 +1283,60 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
     private static int dip2px(Context context, double dpValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5);
+    }
+
+    public interface ImageLoader {
+        /**
+         * 显示图片 - 原形
+         *
+         * @param resource   文件路径、uri、url都可以
+         * @param imageView  显示的控件
+         * @param defaultImg 默认图片
+         */
+        void image(ImageView imageView, String resource, int defaultImg);
+
+        /**
+         * 显示图片 - 原形
+         *
+         * @param resId     drawable资源ID
+         * @param imageView 显示的控件
+         */
+        void image(ImageView imageView, int resId);
+
+        /**
+         * 显示图片 - 圆形
+         *
+         * @param resource   文件路径、uri、url都可以
+         * @param imageView  显示的控件
+         * @param defaultImg 默认图片
+         */
+        void imageCircle(ImageView imageView, String resource, int defaultImg);
+
+        /**
+         * 显示图片 - 圆形
+         *
+         * @param resId     图片资源ID
+         * @param imageView 显示的控件
+         */
+        void imageCircle(ImageView imageView, int resId);
+
+        /**
+         * 显示图片 - 圆角矩形
+         *
+         * @param resource   文件路径、uri、url都可以
+         * @param imageView  显示的控件
+         * @param defaultImg 默认图片
+         * @param radius     弧度
+         */
+        void imageRoundRect(ImageView imageView, String resource, int defaultImg, int radius);
+
+        /**
+         * 显示图片 - 圆角矩形
+         *
+         * @param resId     图片资源ID
+         * @param imageView 显示的控件
+         * @param radius    弧度
+         */
+        void imageRoundRect(ImageView imageView, int resId, int radius);
     }
 }

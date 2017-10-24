@@ -79,6 +79,10 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
         return mItems == null ? null : mItems.get(position);
     }
 
+    public T getLastItem() {
+        return mItems == null || mItems.isEmpty() ? null : mItems.get(size() - 1);
+    }
+
     @Override
     public void add(int location, T object) {
         if (object == null) {
@@ -200,6 +204,16 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
         }
 
         T t = mItems.remove(location);
+        notifyDataSetChanged();
+        return t;
+    }
+
+    public T removeLastItem() {
+        if (mItems == null || mItems.isEmpty()) {
+            return null;
+        }
+
+        T t = mItems.remove(size() - 1);
         notifyDataSetChanged();
         return t;
     }

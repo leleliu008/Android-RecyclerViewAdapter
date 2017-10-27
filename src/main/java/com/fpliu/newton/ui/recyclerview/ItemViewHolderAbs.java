@@ -289,6 +289,14 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
         return self();
     }
 
+    public SubClass scaleType(ImageView.ScaleType scaleType) {
+        if (view instanceof ImageView) {
+            ImageView imageView = (ImageView) view;
+            imageView.setScaleType(scaleType);
+        }
+        return self();
+    }
+
     private void showInfo() {
         Log.i(getClass().getSimpleName(), "imageLoader is not set");
     }

@@ -3,6 +3,8 @@ package com.fpliu.newton.ui.recyclerview;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.fpliu.newton.ui.recyclerview.holder.ItemViewHolderAbs;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;

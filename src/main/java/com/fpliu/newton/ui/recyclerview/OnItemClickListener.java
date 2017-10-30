@@ -1,5 +1,7 @@
 package com.fpliu.newton.ui.recyclerview;
 
+import com.fpliu.newton.ui.recyclerview.holder.ItemViewHolderAbs;
+
 /**
  * @author 792793182@qq.com 2017-07-25.
  */

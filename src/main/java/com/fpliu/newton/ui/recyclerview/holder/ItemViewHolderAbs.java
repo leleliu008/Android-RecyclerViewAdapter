@@ -1,4 +1,4 @@
-package com.fpliu.newton.ui.recyclerview;
+package com.fpliu.newton.ui.recyclerview.holder;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -33,17 +33,21 @@ public abstract class ItemAdapterEx<T, H extends ItemViewHolderAbs> extends Item
     }
 
     @Override
-    public int getItemViewType(int position) {
+    public final int getItemViewType(int position) {
         if (isHeaderViewPos(position)) {
             return mHeaderViews.keyAt(position);
         } else if (isFooterViewPos(position)) {
             return mFootViews.keyAt(position - getHeadersCount() - super.getItemCount());
         }
-        return super.getItemViewType(position - getHeadersCount());
+        return getItemViewType2(position - getHeadersCount());
+    }
+
+    public int getItemViewType2(int position) {
+        return super.getItemViewType(position);
     }
 
     @Override
-    public H onCreateViewHolder(ViewGroup parent, int viewType) {
+    public final H onCreateViewHolder(ViewGroup parent, int viewType) {
         if (mHeaderViews.get(viewType) != null) {
             return onCreateHeaderViewHolder(parent, viewType, mHeaderViews.get(viewType));
         } else if (mFootViews.get(viewType) != null) {
@@ -59,7 +63,7 @@ public abstract class ItemAdapterEx<T, H extends ItemViewHolderAbs> extends Item
     public abstract H onCreateViewHolder2(ViewGroup parent, int viewType);
 
     @Override
-    public void onBindViewHolder(H holder, int position) {
+    public final void onBindViewHolder(H holder, int position) {
         if (isHeaderViewPos(position)) {
             return;
         }

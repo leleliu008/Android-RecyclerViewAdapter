@@ -3,8 +3,6 @@ package com.fpliu.newton.ui.recyclerview.holder;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fpliu.newton.ui.recyclerview.holder.ItemViewHolderAbs;
-
 /**
  * 默认的实现，也可以实现你自己的
  *

@@ -71,10 +71,10 @@ apply plugin: 'com.jfrog.bintray'
 version = "1.0.0"
 
 // 项目的主页,这个是说明，可随便填
-def siteUrl = 'https://github.com/leleliu008/Android-RecyclerViewAdapter'
+def siteUrl = 'https://github.com/leleliu008/Android-RecyclerViewHelper'
 
 // GitHub仓库的URL,这个是说明，可随便填
-def gitUrl = 'https://github.com/leleliu008/Android-RecyclerViewAdapter'
+def gitUrl = 'https://github.com/leleliu008/Android-RecyclerViewHelper'
 
 // 这里是groupId,必须填写,一般填你唯一的包名
 group = "com.fpliu"
@@ -85,7 +85,7 @@ install {
         pom {
             project {
                 packaging 'jar'
-                name 'Android-RecyclerViewAdapter'
+                name 'Android-RecyclerViewHelper'
                 url siteUrl
                 licenses {
                     license {
@@ -144,7 +144,7 @@ bintray {
     pkg {
         userOrg = "fpliu"
         repo = "newton"
-        name = "Android-RecyclerViewAdapter"
+        name = "Android-RecyclerViewHelper"
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]

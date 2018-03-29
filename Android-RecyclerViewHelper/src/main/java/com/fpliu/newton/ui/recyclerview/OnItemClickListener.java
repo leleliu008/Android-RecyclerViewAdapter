@@ -1,11 +1,11 @@
 package com.fpliu.newton.ui.recyclerview;
 
-import com.fpliu.newton.ui.recyclerview.holder.ItemViewHolderAbs;
+import com.fpliu.newton.ui.recyclerview.holder.ItemViewHolder;
 
 /**
  * @author 792793182@qq.com 2017-07-25.
  */
-public interface OnItemClickListener<T, H extends ItemViewHolderAbs> {
+public interface OnItemClickListener<T> {
     /**
      * 条目被点击了事件回掉
      *
@@ -13,5 +13,5 @@ public interface OnItemClickListener<T, H extends ItemViewHolderAbs> {
      * @param position 条目的位置
      * @param item     条目对应的数据
      */
-    void onItemClick(H holder, int position, T item);
+    void onItemClick(ItemViewHolder holder, int position, T item);
 }

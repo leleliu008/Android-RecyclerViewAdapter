@@ -7,15 +7,16 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fpliu.newton.ui.recyclerview.holder.ItemViewHolderAbs;
+import com.fpliu.newton.ui.recyclerview.holder.ItemViewHolder;
 
 import java.util.List;
 
 /**
  * 扩展了功能：增加了设置头和尾的功能
+ *
  * @author 792793182@qq.com 2017-07-18.
  */
-public abstract class ItemAdapterEx<T, H extends ItemViewHolderAbs> extends ItemAdapter<T, H> {
+public abstract class ItemAdapterEx<T> extends ItemAdapter<T> {
 
     private static final int BASE_ITEM_TYPE_HEADER = 100000;
     private static final int BASE_ITEM_TYPE_FOOTER = 200000;
@@ -47,7 +48,7 @@ public abstract class ItemAdapterEx<T, H extends ItemViewHolderAbs> extends Item
     }
 
     @Override
-    public final H onCreateViewHolder(ViewGroup parent, int viewType) {
+    public final ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (mHeaderViews.get(viewType) != null) {
             return onCreateHeaderViewHolder(parent, viewType, mHeaderViews.get(viewType));
         } else if (mFootViews.get(viewType) != null) {
@@ -56,14 +57,14 @@ public abstract class ItemAdapterEx<T, H extends ItemViewHolderAbs> extends Item
         return onCreateViewHolder2(parent, viewType);
     }
 
-    public abstract H onCreateHeaderViewHolder(ViewGroup parent, int viewType, View headerView);
+    public abstract ItemViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType, View headerView);
 
-    public abstract H onCreateFooterViewHolder(ViewGroup parent, int viewType, View footerView);
+    public abstract ItemViewHolder onCreateFooterViewHolder(ViewGroup parent, int viewType, View footerView);
 
-    public abstract H onCreateViewHolder2(ViewGroup parent, int viewType);
+    public abstract ItemViewHolder onCreateViewHolder2(ViewGroup parent, int viewType);
 
     @Override
-    public final void onBindViewHolder(H holder, int position) {
+    public final void onBindViewHolder(ItemViewHolder holder, int position) {
         if (isHeaderViewPos(position)) {
             return;
         }
@@ -98,7 +99,7 @@ public abstract class ItemAdapterEx<T, H extends ItemViewHolderAbs> extends Item
     }
 
     @Override
-    public void onViewAttachedToWindow(H holder) {
+    public void onViewAttachedToWindow(ItemViewHolder holder) {
         int position = holder.getLayoutPosition();
         if (isHeaderViewPos(position) || isFooterViewPos(position)) {
             setFullSpan(holder);

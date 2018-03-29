@@ -2,10 +2,11 @@ package com.fpliu.newton.ui.recyclerview.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.fpliu.newton.ui.recyclerview.OnItemClickListener;
 import com.fpliu.newton.ui.recyclerview.R;
-import com.fpliu.newton.ui.recyclerview.holder.ItemViewHolderAbs;
+import com.fpliu.newton.ui.recyclerview.holder.ItemViewHolder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,12 +19,12 @@ import java.util.ListIterator;
  *
  * @author 792793182@qq.com 2017-07-18.
  */
-public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends RecyclerView.Adapter<H> implements List<T>, View.OnClickListener {
+public abstract class ItemAdapter<T> extends RecyclerView.Adapter<ItemViewHolder> implements List<T>, View.OnClickListener {
 
     //数据项集合
     private List<T> mItems;
 
-    private OnItemClickListener<T, H> onItemClickListener;
+    private OnItemClickListener<T> onItemClickListener;
 
     /**
      * 构造方法
@@ -39,14 +40,17 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
         notifyDataSetChanged();
     }
 
-    public void setOnItemClickListener(OnItemClickListener<T, H> onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener<T> onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
-    public abstract void onBindViewHolder(H holder, int position, T item);
+    @Override
+    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return ItemViewHolder.newInstance(onBindLayout(parent, viewType), parent);
+    }
 
     @Override
-    public void onBindViewHolder(H holder, int position) {
+    public void onBindViewHolder(ItemViewHolder holder, int position) {
         if (onItemClickListener != null) {
             View itemView = holder.getItemView();
             itemView.setTag(R.id.id_recycler_view_item_holder, holder);
@@ -56,13 +60,17 @@ public abstract class ItemAdapter<T, H extends ItemViewHolderAbs> extends Recycl
         onBindViewHolder(holder, position, getItem(position));
     }
 
+    public abstract int onBindLayout(ViewGroup parent, int viewType);
+
+    public abstract void onBindViewHolder(ItemViewHolder holder, int position, T item);
+
     @Override
     public void onClick(View view) {
         Object positionObj = view.getTag(R.id.id_recycler_view_item_position);
         if (positionObj == null) {
             return;
         }
-        H holder = (H) view.getTag(R.id.id_recycler_view_item_holder);
+        ItemViewHolder holder = (ItemViewHolder) view.getTag(R.id.id_recycler_view_item_holder);
         int position = (int) positionObj;
         T item = getItem(position);
         if (onItemClickListener != null) {

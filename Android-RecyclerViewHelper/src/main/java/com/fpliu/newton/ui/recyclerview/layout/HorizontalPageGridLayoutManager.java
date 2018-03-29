@@ -10,22 +10,15 @@ import android.view.View;
  */
 public class HorizontalPageGridLayoutManager extends RecyclerView.LayoutManager {
 
-    private int totalHeight = 0;
-    private int totalWidth = 0;
-    private int offsetY = 0;
-    private int offsetX = 0;
+    @Override
+    public RecyclerView.LayoutParams generateDefaultLayoutParams() {
+        return null;
+    }
 
-    private int rows = 0;
-    private int columns = 0;
-    private int pageSize = 0;
-    private int itemWidth = 0;
-    private int itemHeight = 0;
-    private int onePageSize = 0;
-    private int itemWidthUsed;
-    private int itemHeightUsed;
-
-    private SparseArray<Rect> allItemFrames = new SparseArray<>();
-
+    int totalHeight = 0;
+    int totalWidth = 0;
+    int offsetY = 0;
+    int offsetX = 0;
 
     public HorizontalPageGridLayoutManager(int rows, int columns) {
         this.rows = rows;
@@ -34,14 +27,10 @@ public class HorizontalPageGridLayoutManager extends RecyclerView.LayoutManager 
     }
 
     @Override
-    public RecyclerView.LayoutParams generateDefaultLayoutParams() {
-        return null;
-    }
-
-    @Override
     public boolean canScrollHorizontally() {
         return true;
     }
+
 
     @Override
     public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
@@ -59,6 +48,8 @@ public class HorizontalPageGridLayoutManager extends RecyclerView.LayoutManager 
         return result;
     }
 
+    private SparseArray<Rect> allItemFrames = new SparseArray<>();
+
     private int getUsableWidth() {
         return getWidth() - getPaddingLeft() - getPaddingRight();
     }
@@ -66,6 +57,16 @@ public class HorizontalPageGridLayoutManager extends RecyclerView.LayoutManager 
     private int getUsableHeight() {
         return getHeight() - getPaddingTop() - getPaddingBottom();
     }
+
+    int rows = 0;
+    int columns = 0;
+    int pageSize = 0;
+    int itemWidth = 0;
+    int itemHeight = 0;
+    int onePageSize = 0;
+    int itemWidthUsed;
+    int itemHeightUsed;
+
 
     @Override
     public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
@@ -86,8 +87,9 @@ public class HorizontalPageGridLayoutManager extends RecyclerView.LayoutManager 
         itemHeightUsed = (rows - 1) * itemHeight;
 
         //计算总的页数
-        pageSize = getItemCount() / onePageSize + (getItemCount() % onePageSize == 0 ? 0 : 1);
 
+//        pageSize = state.getItemCount() / onePageSize + (state.getItemCount() % onePageSize == 0 ? 0 : 1);
+        computePageSize(state);
         //计算可以横向滚动的最大值
         totalWidth = (pageSize - 1) * getWidth();
 
@@ -134,6 +136,10 @@ public class HorizontalPageGridLayoutManager extends RecyclerView.LayoutManager 
         recycleAndFillItems(recycler, state);
     }
 
+    private void computePageSize(RecyclerView.State state) {
+        pageSize = state.getItemCount() / onePageSize + (state.getItemCount() % onePageSize == 0 ? 0 : 1);
+    }
+
     @Override
     public void onDetachedFromWindow(RecyclerView view, RecyclerView.Recycler recycler) {
         super.onDetachedFromWindow(view, recycler);
@@ -168,6 +174,7 @@ public class HorizontalPageGridLayoutManager extends RecyclerView.LayoutManager 
                 layoutDecorated(view, rect.left - offsetX, rect.top, rect.right - offsetX, rect.bottom);
             }
         }
+
     }
 
     public boolean isLastRow(int index) {
@@ -196,4 +203,21 @@ public class HorizontalPageGridLayoutManager extends RecyclerView.LayoutManager 
         position++;
         return position % onePageSize == 0;
     }
+
+    @Override
+    public int computeHorizontalScrollRange(RecyclerView.State state) {
+        computePageSize(state);
+        return pageSize * getWidth();
+    }
+
+    @Override
+    public int computeHorizontalScrollOffset(RecyclerView.State state) {
+        return offsetX;
+    }
+
+    @Override
+    public int computeHorizontalScrollExtent(RecyclerView.State state) {
+        return getWidth();
+    }
+
 }

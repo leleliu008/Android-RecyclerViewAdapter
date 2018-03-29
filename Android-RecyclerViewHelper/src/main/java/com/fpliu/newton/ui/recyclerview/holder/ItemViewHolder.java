@@ -36,14 +36,12 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.lang.reflect.Constructor;
-
 /**
  * 万能的RecyclerView.ViewHolder实现（抽象）
  *
  * @author 792793182@qq.com 2017-07-18.
  */
-public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolder {
+public class ItemViewHolder extends RecyclerView.ViewHolder {
 
     private static ImageLoader imageLoader;
 
@@ -56,14 +54,10 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
 
     private View view;
 
-    public ItemViewHolderAbs(View itemView) {
+    public ItemViewHolder(View itemView) {
         super(itemView);
         this.itemView = itemView;
         this.widgetViews = new SparseArray<>();
-    }
-
-    public static void setImageLoader(ImageLoader imageLoader) {
-        ItemViewHolderAbs.imageLoader = imageLoader;
     }
 
     /**
@@ -71,20 +65,15 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      *
      * @param layoutId 布局的ID
      * @param parent   父容器
-     * @param clazz    ItemViewHolderAbs子类
-     * @param <T>
      * @return
      */
-    public static <T extends ItemViewHolderAbs> T newInstance(int layoutId, ViewGroup parent, Class<T> clazz) {
-        try {
-            Constructor<T> constructor = clazz.getDeclaredConstructor(View.class);
-            constructor.setAccessible(true);
-            View view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
-            return constructor.newInstance(view);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    public static ItemViewHolder newInstance(int layoutId, ViewGroup parent) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
+        return new ItemViewHolder(view);
+    }
+
+    public static void setImageLoader(ImageLoader imageLoader) {
+        ItemViewHolder.imageLoader = imageLoader;
     }
 
     /**
@@ -93,9 +82,9 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param viewId 要操作的控件的ID
      * @return 本类的实例
      */
-    public SubClass id(int viewId) {
+    public ItemViewHolder id(int viewId) {
         view = findView(viewId);
-        return self();
+        return this;
     }
 
     /**
@@ -103,12 +92,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      *
      * @return 本类的实例
      */
-    public SubClass parent() {
+    public ItemViewHolder parent() {
         ViewParent parent = view.getParent();
         if (parent instanceof View) {
             view = (View) parent;
         }
-        return self();
+        return this;
     }
 
     /**
@@ -117,12 +106,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param resId 字符串的ID
      * @return 本类的实例
      */
-    public SubClass text(int resId) {
+    public ItemViewHolder text(int resId) {
         if (view instanceof TextView) {
             TextView tv = (TextView) view;
             tv.setText(resId);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -133,13 +122,13 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @return 本类的实例
      * @see Context#getString(int, Object...)
      */
-    public SubClass text(int resId, Object... formatArgs) {
+    public ItemViewHolder text(int resId, Object... formatArgs) {
         Context context = getContext();
         if (context != null) {
             CharSequence text = context.getString(resId, formatArgs);
             text(text);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -148,12 +137,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param text 文本
      * @return 本类的实例
      */
-    public SubClass text(CharSequence text) {
+    public ItemViewHolder text(CharSequence text) {
         if (view instanceof TextView) {
             TextView textView = (TextView) view;
             textView.setText(text);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -163,7 +152,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param goneIfEmpty 如果文本内容为空，将控件隐藏
      * @return 本类的实例
      */
-    public SubClass text(CharSequence text, boolean goneIfEmpty) {
+    public ItemViewHolder text(CharSequence text, boolean goneIfEmpty) {
         if (goneIfEmpty && TextUtils.isEmpty(text)) {
             return gone();
         } else {
@@ -177,12 +166,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param color 文本的颜色
      * @return 本类的实例
      */
-    public SubClass textColor(int color) {
+    public ItemViewHolder textColor(int color) {
         if (view instanceof TextView) {
             TextView tv = (TextView) view;
             tv.setTextColor(color);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -191,12 +180,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param colorId 文本的颜色的Id，使用R.color.xx
      * @return 本类的实例
      */
-    public SubClass textColorWithId(int colorId) {
+    public ItemViewHolder textColorWithId(int colorId) {
         if (view instanceof TextView) {
             TextView tv = (TextView) view;
             tv.setTextColor(tv.getContext().getResources().getColor(colorId));
         }
-        return self();
+        return this;
     }
 
     /**
@@ -205,12 +194,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param typeface 字体
      * @return 本类的实例
      */
-    public SubClass typeface(Typeface typeface) {
+    public ItemViewHolder typeface(Typeface typeface) {
         if (view instanceof TextView) {
             TextView tv = (TextView) view;
             tv.setTypeface(typeface);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -219,12 +208,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param px 文本大小，单位：px
      * @return 本类的实例
      */
-    public SubClass textSizePX(float px) {
+    public ItemViewHolder textSizePX(float px) {
         if (view instanceof TextView) {
             TextView tv = (TextView) view;
             tv.setTextSize(px);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -233,12 +222,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param sp 文本大小，单位：sp
      * @return 本类的实例
      */
-    public SubClass textSizeSP(float sp) {
+    public ItemViewHolder textSizeSP(float sp) {
         if (view instanceof TextView) {
             TextView tv = (TextView) view;
             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -247,12 +236,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param padding 文本与图标的间距，单位：px
      * @return 本类的实例
      */
-    public SubClass compoundDrawablePadding(int padding) {
+    public ItemViewHolder compoundDrawablePadding(int padding) {
         if (view instanceof TextView) {
             TextView tv = (TextView) view;
             tv.setCompoundDrawablePadding(padding);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -264,12 +253,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param bottom 下边的图标资源ID
      * @return 本类的实例
      */
-    public SubClass compoundDrawablesWithIntrinsicBounds(int left, int top, int right, int bottom) {
+    public ItemViewHolder compoundDrawablesWithIntrinsicBounds(int left, int top, int right, int bottom) {
         if (view instanceof TextView) {
             TextView tv = (TextView) view;
             tv.setCompoundDrawablesWithIntrinsicBounds(left, top, right, bottom);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -281,20 +270,20 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param bottom 下边的图标资源
      * @return 本类的实例
      */
-    public SubClass compoundDrawablesWithIntrinsicBounds(Drawable left, Drawable top, Drawable right, Drawable bottom) {
+    public ItemViewHolder compoundDrawablesWithIntrinsicBounds(Drawable left, Drawable top, Drawable right, Drawable bottom) {
         if (view instanceof TextView) {
             TextView tv = (TextView) view;
             tv.setCompoundDrawablesWithIntrinsicBounds(left, top, right, bottom);
         }
-        return self();
+        return this;
     }
 
-    public SubClass scaleType(ImageView.ScaleType scaleType) {
+    public ItemViewHolder scaleType(ImageView.ScaleType scaleType) {
         if (view instanceof ImageView) {
             ImageView imageView = (ImageView) view;
             imageView.setScaleType(scaleType);
         }
-        return self();
+        return this;
     }
 
     private void showInfo() {
@@ -307,7 +296,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param resId 图片资源的ID
      * @return 本类的实例
      */
-    public SubClass image(int resId) {
+    public ItemViewHolder image(int resId) {
         if (view instanceof ImageView) {
             ImageView imageView = (ImageView) view;
             if (imageLoader == null) {
@@ -321,7 +310,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
                 imageLoader.image(imageView, resId);
             }
         }
-        return self();
+        return this;
     }
 
     /**
@@ -330,7 +319,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param resId 图片资源的ID
      * @return 本类的实例
      */
-    public SubClass imageCircle(int resId) {
+    public ItemViewHolder imageCircle(int resId) {
         if (view instanceof ImageView) {
             if (imageLoader == null) {
                 showInfo();
@@ -338,7 +327,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
                 imageLoader.imageCircle((ImageView) view, resId);
             }
         }
-        return self();
+        return this;
     }
 
     /**
@@ -347,7 +336,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param resId 图片资源的ID
      * @return 本类的实例
      */
-    public SubClass imageRound(int resId, int radius) {
+    public ItemViewHolder imageRound(int resId, int radius) {
         if (view instanceof ImageView) {
             if (imageLoader == null) {
                 showInfo();
@@ -355,7 +344,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
                 imageLoader.imageRoundRect((ImageView) view, resId, radius);
             }
         }
-        return self();
+        return this;
     }
 
     /**
@@ -364,12 +353,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param bitmap 位图
      * @return 本类的实例
      */
-    public SubClass image(Bitmap bitmap) {
+    public ItemViewHolder image(Bitmap bitmap) {
         if (view instanceof ImageView) {
             ImageView imageView = (ImageView) view;
             imageView.setImageBitmap(bitmap);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -378,7 +367,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param resource   文件路径、uri、url都可以
      * @param defaultImg 默认图片
      */
-    public SubClass image(String resource, int defaultImg) {
+    public ItemViewHolder image(String resource, int defaultImg) {
         if (view instanceof ImageView) {
             if (imageLoader == null) {
                 showInfo();
@@ -386,7 +375,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
                 imageLoader.image((ImageView) view, resource, defaultImg);
             }
         }
-        return self();
+        return this;
     }
 
     /**
@@ -395,7 +384,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param resource   文件路径、uri、url都可以
      * @param defaultImg 默认图片
      */
-    public SubClass imageCircle(String resource, int defaultImg) {
+    public ItemViewHolder imageCircle(String resource, int defaultImg) {
         if (view instanceof ImageView) {
             if (imageLoader == null) {
                 showInfo();
@@ -403,7 +392,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
                 imageLoader.imageCircle((ImageView) view, resource, defaultImg);
             }
         }
-        return self();
+        return this;
     }
 
     /**
@@ -413,7 +402,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param resource   文件路径、uri、url都可以
      * @param defaultImg 默认图片
      */
-    public SubClass imageRound(String resource, int defaultImg, int radius) {
+    public ItemViewHolder imageRound(String resource, int defaultImg, int radius) {
         if (view instanceof ImageView) {
             if (imageLoader == null) {
                 showInfo();
@@ -421,7 +410,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
                 imageLoader.imageRoundRect((ImageView) view, resource, defaultImg, radius);
             }
         }
-        return self();
+        return this;
     }
 
     /**
@@ -430,12 +419,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param rating 具体值
      * @return 本类的实例
      */
-    public SubClass rating(float rating) {
+    public ItemViewHolder rating(float rating) {
         if (view instanceof RatingBar) {
             RatingBar ratingBar = (RatingBar) view;
             ratingBar.setRating(rating);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -444,12 +433,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param adapter adapter
      * @return self
      */
-    public SubClass adapter(Adapter adapter) {
+    public ItemViewHolder adapter(Adapter adapter) {
         if (view instanceof AdapterView) {
             AdapterView adapterView = (AdapterView) view;
             adapterView.setAdapter(adapter);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -458,12 +447,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param adapter adapter
      * @return self
      */
-    public SubClass adapter(ExpandableListAdapter adapter) {
+    public ItemViewHolder adapter(ExpandableListAdapter adapter) {
         if (view instanceof ExpandableListView) {
             ExpandableListView expandableListView = (ExpandableListView) view;
             expandableListView.setAdapter(adapter);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -472,11 +461,11 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param tag 标记
      * @return 本类的实例
      */
-    public SubClass tag(Object tag) {
+    public ItemViewHolder tag(Object tag) {
         if (view != null) {
             view.setTag(tag);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -484,11 +473,11 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      *
      * @return 本类的实例
      */
-    public SubClass tagWithCurrentId(Object tag) {
+    public ItemViewHolder tagWithCurrentId(Object tag) {
         if (view != null) {
             view.setTag(view.getId(), tag);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -498,11 +487,11 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param tag 标记
      * @return 本类的实例
      */
-    public SubClass tag(int key, Object tag) {
+    public ItemViewHolder tag(int key, Object tag) {
         if (view != null) {
             view.setTag(key, tag);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -531,11 +520,11 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param enabled 是否可操作
      * @return 本类的实例
      */
-    public SubClass enabled(boolean enabled) {
+    public ItemViewHolder enabled(boolean enabled) {
         if (view != null) {
             view.setEnabled(enabled);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -544,9 +533,9 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param selected 是否被选中
      * @return 本类的实例
      */
-    public SubClass selected(boolean selected) {
+    public ItemViewHolder selected(boolean selected) {
         view.setSelected(selected);
-        return self();
+        return this;
     }
 
     /**
@@ -555,12 +544,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param checked 是否可选择
      * @return 本类的实例
      */
-    public SubClass checked(boolean checked) {
+    public ItemViewHolder checked(boolean checked) {
         if (view instanceof Checkable) {
             Checkable checkable = (Checkable) view;
             checkable.setChecked(checked);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -580,11 +569,11 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param clickable 是否可点击
      * @return 本类的实例
      */
-    public SubClass clickable(boolean clickable) {
+    public ItemViewHolder clickable(boolean clickable) {
         if (view != null) {
             view.setClickable(clickable);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -592,11 +581,11 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      *
      * @return 本类的实例
      */
-    public SubClass visibility(int visibility) {
+    public ItemViewHolder visibility(int visibility) {
         if (view != null && view.getVisibility() != visibility) {
             view.setVisibility(visibility);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -604,7 +593,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      *
      * @return 本类的实例
      */
-    public SubClass gone() {
+    public ItemViewHolder gone() {
         return visibility(View.GONE);
     }
 
@@ -613,7 +602,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      *
      * @return 本类的实例
      */
-    public SubClass invisible() {
+    public ItemViewHolder invisible() {
         return visibility(View.INVISIBLE);
     }
 
@@ -622,7 +611,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      *
      * @return 本类的实例
      */
-    public SubClass visible() {
+    public ItemViewHolder visible() {
         return visibility(View.VISIBLE);
     }
 
@@ -632,7 +621,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param resId 图片、颜色、drawable等的ID
      * @return 本类的实例
      */
-    public SubClass background(int resId) {
+    public ItemViewHolder background(int resId) {
         if (view != null) {
             if (resId == 0) {
                 view.setBackgroundDrawable(null);
@@ -640,7 +629,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
                 view.setBackgroundResource(resId);
             }
         }
-        return self();
+        return this;
     }
 
     /**
@@ -649,11 +638,11 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param bg 背景
      * @return 本类的实例
      */
-    public SubClass background(Drawable bg) {
+    public ItemViewHolder background(Drawable bg) {
         if (view != null) {
             view.setBackgroundDrawable(bg);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -662,11 +651,11 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param color 颜色
      * @return 本类的实例
      */
-    public SubClass backgroundColor(int color) {
+    public ItemViewHolder backgroundColor(int color) {
         if (view != null) {
             view.setBackgroundColor(color);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -709,11 +698,11 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
         return result;
     }
 
-    public SubClass checkedChange(CompoundButton.OnCheckedChangeListener listener) {
+    public ItemViewHolder checkedChange(CompoundButton.OnCheckedChangeListener listener) {
         if (view instanceof CompoundButton) {
             ((CompoundButton) view).setOnCheckedChangeListener(listener);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -722,11 +711,11 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param listener 点击事件监听器
      * @return 本类的实例
      */
-    public SubClass clicked(View.OnClickListener listener) {
+    public ItemViewHolder clicked(View.OnClickListener listener) {
         if (view != null) {
             view.setOnClickListener(listener);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -735,11 +724,11 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param listener 长按事件监听器
      * @return 本类的实例
      */
-    public SubClass longClicked(View.OnLongClickListener listener) {
+    public ItemViewHolder longClicked(View.OnLongClickListener listener) {
         if (view != null) {
             view.setOnLongClickListener(listener);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -748,12 +737,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param listener 条目点击事件监听器
      * @return 本类的实例
      */
-    public SubClass itemClicked(AdapterView.OnItemClickListener listener) {
+    public ItemViewHolder itemClicked(AdapterView.OnItemClickListener listener) {
         if (view instanceof AdapterView) {
             AdapterView<?> adapterView = (AdapterView<?>) view;
             adapterView.setOnItemClickListener(listener);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -762,12 +751,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param listener 条目选中事件监听器
      * @return 本类的实例
      */
-    public SubClass itemSelected(AdapterView.OnItemSelectedListener listener) {
+    public ItemViewHolder itemSelected(AdapterView.OnItemSelectedListener listener) {
         if (view instanceof AdapterView) {
             AdapterView<?> adapterView = (AdapterView<?>) view;
             adapterView.setOnItemSelectedListener(listener);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -776,12 +765,12 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param position The position of the item to be selected.
      * @return self
      */
-    public SubClass selection(int position) {
+    public ItemViewHolder selection(int position) {
         if (view instanceof AdapterView) {
             AdapterView<?> adapterView = (AdapterView<?>) view;
             adapterView.setSelection(position);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -789,7 +778,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      *
      * @return self
      */
-    public SubClass clear() {
+    public ItemViewHolder clear() {
         if (view != null) {
             if (view instanceof ImageView) {
                 ImageView iv = ((ImageView) view);
@@ -803,7 +792,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
                 tv.setText("");
             }
         }
-        return self();
+        return this;
     }
 
 
@@ -816,7 +805,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param bottomDip 下外边距
      * @return 本类的实例
      */
-    public SubClass marginDIP(float leftDip, float topDip, float rightDip, float bottomDip) {
+    public ItemViewHolder marginDIP(float leftDip, float topDip, float rightDip, float bottomDip) {
         if (view != null) {
             ViewGroup.LayoutParams lp = view.getLayoutParams();
             if (lp instanceof ViewGroup.MarginLayoutParams) {
@@ -829,7 +818,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
                 view.setLayoutParams(lp);
             }
         }
-        return self();
+        return this;
     }
 
     /**
@@ -838,7 +827,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param margin 4个边的外边距一样大，单位：dip
      * @return 本类的实例
      */
-    public SubClass marginDIP(float margin) {
+    public ItemViewHolder marginDIP(float margin) {
         return marginDIP(margin, margin, margin, margin);
     }
 
@@ -851,7 +840,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param bottomPX 下外边距
      * @return 本类的实例
      */
-    public SubClass marginPX(int leftPX, int topPX, int rightPX, int bottomPX) {
+    public ItemViewHolder marginPX(int leftPX, int topPX, int rightPX, int bottomPX) {
         if (view != null) {
             ViewGroup.LayoutParams lp = view.getLayoutParams();
             if (lp instanceof ViewGroup.MarginLayoutParams) {
@@ -859,7 +848,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
                 view.setLayoutParams(lp);
             }
         }
-        return self();
+        return this;
     }
 
     /**
@@ -868,7 +857,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param margin 4个边的外边距一样大，单位：px
      * @return 本类的实例
      */
-    public SubClass marginPX(int margin) {
+    public ItemViewHolder marginPX(int margin) {
         return marginPX(margin, margin, margin, margin);
     }
 
@@ -881,7 +870,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param bottomDip 下内边距
      * @return 本类的实例
      */
-    public SubClass paddingDIP(float leftDip, float topDip, float rightDip, float bottomDip) {
+    public ItemViewHolder paddingDIP(float leftDip, float topDip, float rightDip, float bottomDip) {
         if (view != null) {
             Context context = getContext();
             int left = dip2px(context, leftDip);
@@ -890,7 +879,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
             int bottom = dip2px(context, bottomDip);
             view.setPadding(left, top, right, bottom);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -899,7 +888,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param padding 4个边的内边距一样大，单位：dip
      * @return 本类的实例
      */
-    public SubClass paddingDIP(float padding) {
+    public ItemViewHolder paddingDIP(float padding) {
         return paddingDIP(padding, padding, padding, padding);
     }
 
@@ -912,11 +901,11 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param bottomPX 下内边距
      * @return 本类的实例
      */
-    public SubClass paddingPX(int leftPX, int topPX, int rightPX, int bottomPX) {
+    public ItemViewHolder paddingPX(int leftPX, int topPX, int rightPX, int bottomPX) {
         if (view != null) {
             view.setPadding(leftPX, topPX, rightPX, bottomPX);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -925,7 +914,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param padding 4个边的内边距一样大，单位：px
      * @return 本类的实例
      */
-    public SubClass paddingPX(int padding) {
+    public ItemViewHolder paddingPX(int padding) {
         return paddingPX(padding, padding, padding, padding);
     }
 
@@ -935,9 +924,9 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param dip 宽度，可以是具体数值，单位：dip，也可以是ViewGroup.LayoutParams.FILL_PARENT、ViewGroup.LayoutParams.WRAP_CONTENT、ViewGroup.LayoutParams.MATCH_PARENT
      * @return 本类的实例
      */
-    public SubClass widthDIP(int dip) {
+    public ItemViewHolder widthDIP(int dip) {
         size(true, dip, true);
-        return self();
+        return this;
     }
 
     /**
@@ -946,9 +935,9 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param dip 高度，可以是具体数值，单位：dip，也可以是ViewGroup.LayoutParams.FILL_PARENT、ViewGroup.LayoutParams.WRAP_CONTENT、ViewGroup.LayoutParams.MATCH_PARENT
      * @return 本类的实例
      */
-    public SubClass heightDIP(int dip) {
+    public ItemViewHolder heightDIP(int dip) {
         size(false, dip, true);
-        return self();
+        return this;
     }
 
     /**
@@ -957,9 +946,9 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param px 宽度，可以是具体数值，单位：px，也可以是ViewGroup.LayoutParams.FILL_PARENT、ViewGroup.LayoutParams.WRAP_CONTENT、ViewGroup.LayoutParams.MATCH_PARENT
      * @return 本类的实例
      */
-    public SubClass widthPX(int px) {
+    public ItemViewHolder widthPX(int px) {
         size(true, px, false);
-        return self();
+        return this;
     }
 
     /**
@@ -968,9 +957,9 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param px 高度，可以是具体数值，单位：px，也可以是ViewGroup.LayoutParams.FILL_PARENT、ViewGroup.LayoutParams.WRAP_CONTENT、ViewGroup.LayoutParams.MATCH_PARENT
      * @return 本类的实例
      */
-    public SubClass heightPX(int px) {
+    public ItemViewHolder heightPX(int px) {
         size(false, px, false);
-        return self();
+        return this;
     }
 
     /**
@@ -980,9 +969,9 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param isDIP 单位是否是dip，否则是px
      * @return 本类的实例
      */
-    public SubClass width(int width, boolean isDIP) {
+    public ItemViewHolder width(int width, boolean isDIP) {
         size(true, width, isDIP);
-        return self();
+        return this;
     }
 
     /**
@@ -992,9 +981,9 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param isDIP  单位是否是dip，否则是px
      * @return 本类的实例
      */
-    public SubClass height(int height, boolean isDIP) {
+    public ItemViewHolder height(int height, boolean isDIP) {
         size(false, height, isDIP);
-        return self();
+        return this;
     }
 
     private void size(boolean width, int size, boolean dip) {
@@ -1019,7 +1008,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param listener    动画事件的回掉
      * @return 本类的实例
      */
-    public SubClass animate(int animationId, Animation.AnimationListener listener) {
+    public ItemViewHolder animate(int animationId, Animation.AnimationListener listener) {
         Animation animation = AnimationUtils.loadAnimation(itemView.getContext(), animationId);
         animation.setAnimationListener(listener);
         return animate(animation);
@@ -1031,7 +1020,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param animationId 动画资源的ID
      * @return 本类的实例
      */
-    public SubClass animate(int animationId) {
+    public ItemViewHolder animate(int animationId) {
         return animate(animationId, null);
     }
 
@@ -1041,11 +1030,11 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param animation 动画
      * @return 本类的实例
      */
-    public SubClass animate(Animation animation) {
+    public ItemViewHolder animate(Animation animation) {
         if (view != null && animation != null) {
             view.startAnimation(animation);
         }
-        return self();
+        return this;
     }
 
     /**
@@ -1053,11 +1042,11 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      *
      * @return 本类的实例
      */
-    public SubClass click() {
+    public ItemViewHolder click() {
         if (view != null) {
             view.performClick();
         }
-        return self();
+        return this;
     }
 
     /**
@@ -1065,11 +1054,11 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      *
      * @return 本类的实例
      */
-    public SubClass longClick() {
+    public ItemViewHolder longClick() {
         if (view != null) {
             view.performLongClick();
         }
-        return self();
+        return this;
     }
 
     public View inflate(int layoutId, ViewGroup parent, boolean attachToParent) {
@@ -1083,7 +1072,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param expand   展开或者收起
      * @return 本类的实例
      */
-    public SubClass expand(int position, boolean expand) {
+    public ItemViewHolder expand(int position, boolean expand) {
         if (view instanceof ExpandableListView) {
             ExpandableListView expandableListView = (ExpandableListView) view;
             if (expand) {
@@ -1092,7 +1081,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
                 expandableListView.collapseGroup(position);
             }
         }
-        return self();
+        return this;
     }
 
     /**
@@ -1101,7 +1090,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
      * @param expand 展开或者收起
      * @return 本类的实例
      */
-    public SubClass expandAll(boolean expand) {
+    public ItemViewHolder expandAll(boolean expand) {
         if (view instanceof ExpandableListView) {
             ExpandableListView expandableListView = (ExpandableListView) view;
             ExpandableListAdapter expandableListAdapter = expandableListView.getExpandableListAdapter();
@@ -1117,7 +1106,7 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
             }
         }
 
-        return self();
+        return this;
     }
 
     public <T extends View> T getItemView() {
@@ -1266,10 +1255,6 @@ public abstract class ItemViewHolderAbs<SubClass> extends RecyclerView.ViewHolde
             return ((EditText) view).getEditableText();
         }
         return null;
-    }
-
-    private SubClass self() {
-        return (SubClass) this;
     }
 
     private Context getContext() {

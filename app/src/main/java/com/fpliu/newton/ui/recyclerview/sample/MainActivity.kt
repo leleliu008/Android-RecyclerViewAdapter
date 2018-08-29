@@ -23,9 +23,9 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
 
         val items = ArrayList<Pair<Int, String>>().apply {
-            repeat(10, {
+            repeat(10) {
                 add(Pair(it, it.toString()))
-            })
+            }
         }
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)

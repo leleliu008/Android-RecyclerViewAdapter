@@ -5,8 +5,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion(26)
-    buildToolsVersion("26.0.2")
+    compileSdkVersion(27)
 
     defaultConfig {
         minSdkVersion(14)
@@ -41,12 +40,12 @@ android {
 }
 
 dependencies {
-    api(project(":Android-RecyclerViewHelper"))
+    api(project(":library"))
     //http://kotlinlang.org/docs/reference/using-gradle.html#configuring-dependencies
     api("org.jetbrains.kotlin:kotlin-stdlib:1.2.21")
     api("com.android.support:support-annotations:26.1.0")
-    api("com.android.support:appcompat-v7:26.1.0")
-    api("com.android.support:design:26.1.0")
+    api("com.android.support:appcompat-v7:27.1.0")
+    api("com.android.support:design:27.1.0")
     api("com.fpliu:Android-BaseUI:1.0.0")
     api("com.fpliu:Android-CustomDimen:1.0.0")
     api("com.fpliu:Android-CustomDrawable:1.0.0")

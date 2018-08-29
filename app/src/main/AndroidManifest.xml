@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.fpliu.newton.ui.recyclerview.sample">
 
     <application
         android:name=".MyApp"
         android:label="RecyclerHelperTest"
-        android:theme="@style/myTheme">
+        android:theme="@style/myTheme"
+        tools:replace="android:label">
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">

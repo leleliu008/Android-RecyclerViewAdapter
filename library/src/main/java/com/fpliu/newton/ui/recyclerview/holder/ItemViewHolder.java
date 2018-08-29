@@ -4,6 +4,16 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.AnimRes;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.FloatRange;
+import android.support.annotation.IdRes;
+import android.support.annotation.IntDef;
+import android.support.annotation.IntRange;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -36,6 +46,9 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * 万能的RecyclerView.ViewHolder实现（抽象）
  *
@@ -67,7 +80,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
      * @param parent   父容器
      * @return
      */
-    public static ItemViewHolder newInstance(int layoutId, ViewGroup parent) {
+    public static ItemViewHolder newInstance(@LayoutRes int layoutId, ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
         return new ItemViewHolder(view);
     }
@@ -82,7 +95,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
      * @param viewId 要操作的控件的ID
      * @return 本类的实例
      */
-    public ItemViewHolder id(int viewId) {
+    public ItemViewHolder id(@IdRes int viewId) {
         view = findView(viewId);
         return this;
     }
@@ -103,13 +116,13 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     /**
      * 给TextView设置文本
      *
-     * @param resId 字符串的ID
+     * @param stringRes 字符串资源
      * @return 本类的实例
      */
-    public ItemViewHolder text(int resId) {
+    public ItemViewHolder text(@StringRes int stringRes) {
         if (view instanceof TextView) {
             TextView tv = (TextView) view;
-            tv.setText(resId);
+            tv.setText(stringRes);
         }
         return this;
     }
@@ -117,15 +130,15 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     /**
      * 给TextView设置格式化文本
      *
-     * @param resId      字符串的ID
+     * @param stringRes  字符串资源
      * @param formatArgs 格式化参数
      * @return 本类的实例
      * @see Context#getString(int, Object...)
      */
-    public ItemViewHolder text(int resId, Object... formatArgs) {
+    public ItemViewHolder text(@StringRes int stringRes, Object... formatArgs) {
         Context context = getContext();
         if (context != null) {
-            CharSequence text = context.getString(resId, formatArgs);
+            CharSequence text = context.getString(stringRes, formatArgs);
             text(text);
         }
         return this;
@@ -166,7 +179,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
      * @param color 文本的颜色
      * @return 本类的实例
      */
-    public ItemViewHolder textColor(int color) {
+    public ItemViewHolder textColor(@ColorInt int color) {
         if (view instanceof TextView) {
             TextView tv = (TextView) view;
             tv.setTextColor(color);
@@ -177,13 +190,13 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     /**
      * 设置文本颜色
      *
-     * @param colorId 文本的颜色的Id，使用R.color.xx
+     * @param colorRes 文本的颜色的Id，使用R.color.xx
      * @return 本类的实例
      */
-    public ItemViewHolder textColorWithId(int colorId) {
+    public ItemViewHolder textColorRes(@ColorRes int colorRes) {
         if (view instanceof TextView) {
             TextView tv = (TextView) view;
-            tv.setTextColor(tv.getContext().getResources().getColor(colorId));
+            tv.setTextColor(tv.getContext().getResources().getColor(colorRes));
         }
         return this;
     }
@@ -208,7 +221,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
      * @param px 文本大小，单位：px
      * @return 本类的实例
      */
-    public ItemViewHolder textSizePX(float px) {
+    public ItemViewHolder textSizePX(@FloatRange(from = 0f) float px) {
         if (view instanceof TextView) {
             TextView tv = (TextView) view;
             tv.setTextSize(px);
@@ -222,7 +235,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
      * @param sp 文本大小，单位：sp
      * @return 本类的实例
      */
-    public ItemViewHolder textSizeSP(float sp) {
+    public ItemViewHolder textSizeSP(@FloatRange(from = 0f) float sp) {
         if (view instanceof TextView) {
             TextView tv = (TextView) view;
             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp);
@@ -253,7 +266,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
      * @param bottom 下边的图标资源ID
      * @return 本类的实例
      */
-    public ItemViewHolder compoundDrawablesWithIntrinsicBounds(int left, int top, int right, int bottom) {
+    public ItemViewHolder compoundDrawablesWithIntrinsicBounds(@DrawableRes int left, @DrawableRes int top, @DrawableRes int right, @DrawableRes int bottom) {
         if (view instanceof TextView) {
             TextView tv = (TextView) view;
             tv.setCompoundDrawablesWithIntrinsicBounds(left, top, right, bottom);
@@ -293,21 +306,21 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     /**
      * 给ImageView设置图片资源
      *
-     * @param resId 图片资源的ID
+     * @param drawableRes 图片资源
      * @return 本类的实例
      */
-    public ItemViewHolder image(int resId) {
+    public ItemViewHolder image(@DrawableRes int drawableRes) {
         if (view instanceof ImageView) {
             ImageView imageView = (ImageView) view;
             if (imageLoader == null) {
                 showInfo();
-                if (resId == 0) {
+                if (drawableRes == 0) {
                     imageView.setImageBitmap(null);
                 } else {
-                    imageView.setImageResource(resId);
+                    imageView.setImageResource(drawableRes);
                 }
             } else {
-                imageLoader.image(imageView, resId);
+                imageLoader.image(imageView, drawableRes);
             }
         }
         return this;
@@ -316,15 +329,15 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     /**
      * 给ImageView设置图片资源
      *
-     * @param resId 图片资源的ID
+     * @param drawableRes 图片资源
      * @return 本类的实例
      */
-    public ItemViewHolder imageCircle(int resId) {
+    public ItemViewHolder imageCircle(@DrawableRes int drawableRes) {
         if (view instanceof ImageView) {
             if (imageLoader == null) {
                 showInfo();
             } else {
-                imageLoader.imageCircle((ImageView) view, resId);
+                imageLoader.imageCircle((ImageView) view, drawableRes);
             }
         }
         return this;
@@ -333,15 +346,15 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     /**
      * 给ImageView设置图片资源
      *
-     * @param resId 图片资源的ID
+     * @param drawableRes 图片资源
      * @return 本类的实例
      */
-    public ItemViewHolder imageRound(int resId, int radius) {
+    public ItemViewHolder imageRound(@DrawableRes int drawableRes, @IntRange(from = 0) int radius) {
         if (view instanceof ImageView) {
             if (imageLoader == null) {
                 showInfo();
             } else {
-                imageLoader.imageRoundRect((ImageView) view, resId, radius);
+                imageLoader.imageRoundRect((ImageView) view, drawableRes, radius);
             }
         }
         return this;
@@ -364,15 +377,15 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     /**
      * 显示图片 - 原形
      *
-     * @param resource   文件路径、uri、url都可以
-     * @param defaultImg 默认图片
+     * @param resource           文件路径、uri、url都可以
+     * @param defaultDrawableRes 默认图片
      */
-    public ItemViewHolder image(String resource, int defaultImg) {
+    public ItemViewHolder image(String resource, @DrawableRes int defaultDrawableRes) {
         if (view instanceof ImageView) {
             if (imageLoader == null) {
                 showInfo();
             } else {
-                imageLoader.image((ImageView) view, resource, defaultImg);
+                imageLoader.image((ImageView) view, resource, defaultDrawableRes);
             }
         }
         return this;
@@ -381,15 +394,15 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     /**
      * 显示图片 - 圆形
      *
-     * @param resource   文件路径、uri、url都可以
-     * @param defaultImg 默认图片
+     * @param resource           文件路径、uri、url都可以
+     * @param defaultDrawableRes 默认图片
      */
-    public ItemViewHolder imageCircle(String resource, int defaultImg) {
+    public ItemViewHolder imageCircle(String resource, @DrawableRes int defaultDrawableRes) {
         if (view instanceof ImageView) {
             if (imageLoader == null) {
                 showInfo();
             } else {
-                imageLoader.imageCircle((ImageView) view, resource, defaultImg);
+                imageLoader.imageCircle((ImageView) view, resource, defaultDrawableRes);
             }
         }
         return this;
@@ -398,16 +411,16 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     /**
      * 显示图片 - 圆角矩形
      *
-     * @param radius     弧度
-     * @param resource   文件路径、uri、url都可以
-     * @param defaultImg 默认图片
+     * @param radius             弧度
+     * @param resource           文件路径、uri、url都可以
+     * @param defaultDrawableRes 默认图片
      */
-    public ItemViewHolder imageRound(String resource, int defaultImg, int radius) {
+    public ItemViewHolder imageRound(String resource, @DrawableRes int defaultDrawableRes, @IntRange(from = 0) int radius) {
         if (view instanceof ImageView) {
             if (imageLoader == null) {
                 showInfo();
             } else {
-                imageLoader.imageRoundRect((ImageView) view, resource, defaultImg, radius);
+                imageLoader.imageRoundRect((ImageView) view, resource, defaultDrawableRes, radius);
             }
         }
         return this;
@@ -576,12 +589,17 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+    @IntDef({View.VISIBLE, View.INVISIBLE, View.GONE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Visibility {
+    }
+
     /**
      * 设置当前控件控件的可见性
      *
      * @return 本类的实例
      */
-    public ItemViewHolder visibility(int visibility) {
+    public ItemViewHolder visibility(@Visibility int visibility) {
         if (view != null && view.getVisibility() != visibility) {
             view.setVisibility(visibility);
         }
@@ -618,15 +636,15 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     /**
      * 设置控件的背景
      *
-     * @param resId 图片、颜色、drawable等的ID
+     * @param drawableRes 图片、颜色、drawable等的ID
      * @return 本类的实例
      */
-    public ItemViewHolder background(int resId) {
+    public ItemViewHolder background(@DrawableRes int drawableRes) {
         if (view != null) {
-            if (resId == 0) {
+            if (drawableRes == 0) {
                 view.setBackgroundDrawable(null);
             } else {
-                view.setBackgroundResource(resId);
+                view.setBackgroundResource(drawableRes);
             }
         }
         return this;
@@ -651,9 +669,22 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
      * @param color 颜色
      * @return 本类的实例
      */
-    public ItemViewHolder backgroundColor(int color) {
+    public ItemViewHolder backgroundColor(@ColorInt int color) {
         if (view != null) {
             view.setBackgroundColor(color);
+        }
+        return this;
+    }
+
+    /**
+     * 设置控件的背景颜色
+     *
+     * @param colorRes 颜色资源
+     * @return 本类的实例
+     */
+    public ItemViewHolder backgroundColorRes(@ColorRes int colorRes) {
+        if (view != null) {
+            view.setBackgroundColor(view.getContext().getResources().getColor(colorRes));
         }
         return this;
     }
@@ -1008,7 +1039,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
      * @param listener    动画事件的回掉
      * @return 本类的实例
      */
-    public ItemViewHolder animate(int animationId, Animation.AnimationListener listener) {
+    public ItemViewHolder animate(@AnimRes int animationId, Animation.AnimationListener listener) {
         Animation animation = AnimationUtils.loadAnimation(itemView.getContext(), animationId);
         animation.setAnimationListener(listener);
         return animate(animation);
@@ -1020,7 +1051,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
      * @param animationId 动画资源的ID
      * @return 本类的实例
      */
-    public ItemViewHolder animate(int animationId) {
+    public ItemViewHolder animate(@AnimRes int animationId) {
         return animate(animationId, null);
     }
 
@@ -1061,8 +1092,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    public View inflate(int layoutId, ViewGroup parent, boolean attachToParent) {
-        return LayoutInflater.from(getContext()).inflate(layoutId, parent, attachToParent);
+    public View inflate(@LayoutRes int layoutRes, ViewGroup parent, boolean attachToParent) {
+        return LayoutInflater.from(getContext()).inflate(layoutRes, parent, attachToParent);
     }
 
     /**
@@ -1282,11 +1313,11 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         /**
          * 显示图片 - 原形
          *
-         * @param resource   文件路径、uri、url都可以
-         * @param imageView  显示的控件
-         * @param defaultImg 默认图片
+         * @param resource           文件路径、uri、url都可以
+         * @param imageView          显示的控件
+         * @param defaultDrawableRes 默认图片
          */
-        void image(ImageView imageView, String resource, int defaultImg);
+        void image(ImageView imageView, String resource, @DrawableRes int defaultDrawableRes);
 
         /**
          * 显示图片 - 原形
@@ -1299,37 +1330,37 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         /**
          * 显示图片 - 圆形
          *
-         * @param resource   文件路径、uri、url都可以
-         * @param imageView  显示的控件
-         * @param defaultImg 默认图片
+         * @param resource           文件路径、uri、url都可以
+         * @param imageView          显示的控件
+         * @param defaultDrawableRes 默认图片
          */
-        void imageCircle(ImageView imageView, String resource, int defaultImg);
+        void imageCircle(ImageView imageView, String resource, @DrawableRes int defaultDrawableRes);
 
         /**
          * 显示图片 - 圆形
          *
-         * @param resId     图片资源ID
-         * @param imageView 显示的控件
+         * @param defaultDrawableRes 图片资源ID
+         * @param imageView          显示的控件
          */
-        void imageCircle(ImageView imageView, int resId);
+        void imageCircle(ImageView imageView, @DrawableRes int defaultDrawableRes);
 
         /**
          * 显示图片 - 圆角矩形
          *
-         * @param resource   文件路径、uri、url都可以
-         * @param imageView  显示的控件
-         * @param defaultImg 默认图片
-         * @param radius     弧度
+         * @param resource           文件路径、uri、url都可以
+         * @param imageView          显示的控件
+         * @param defaultDrawableRes 默认图片
+         * @param radius             弧度
          */
-        void imageRoundRect(ImageView imageView, String resource, int defaultImg, int radius);
+        void imageRoundRect(ImageView imageView, String resource, @DrawableRes int defaultDrawableRes, int radius);
 
         /**
          * 显示图片 - 圆角矩形
          *
-         * @param resId     图片资源ID
-         * @param imageView 显示的控件
-         * @param radius    弧度
+         * @param drawableRes 图片资源
+         * @param imageView   显示的控件
+         * @param radius      弧度
          */
-        void imageRoundRect(ImageView imageView, int resId, int radius);
+        void imageRoundRect(ImageView imageView, int drawableRes, int radius);
     }
 }

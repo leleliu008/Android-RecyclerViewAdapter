@@ -1,15 +1,16 @@
 package com.fpliu.newton.ui.recyclerview.adapter;
 
-import android.support.v4.util.SparseArrayCompat;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.fpliu.newton.ui.recyclerview.holder.ItemViewHolder;
 
 import java.util.List;
+
+import androidx.collection.SparseArrayCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 /**
  * 扩展了功能：增加了设置头和尾的功能

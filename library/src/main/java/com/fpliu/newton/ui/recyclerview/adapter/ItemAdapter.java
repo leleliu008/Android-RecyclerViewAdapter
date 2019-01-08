@@ -1,6 +1,5 @@
 package com.fpliu.newton.ui.recyclerview.adapter;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -13,6 +12,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * RecyclerView的万能Adapter

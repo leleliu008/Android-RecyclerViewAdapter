@@ -2,6 +2,7 @@ package com.fpliu.newton.ui.recyclerview.sample
 
 import android.app.Application
 import android.widget.ImageView
+import com.fpliu.newton.ui.base.BaseUIConfig
 import com.fpliu.newton.ui.recyclerview.holder.ItemViewHolder
 
 /**
@@ -12,6 +13,8 @@ class MyApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        BaseUIConfig.headHeight = resources.getDimensionPixelSize(R.dimen.dp750_100)
 
         ItemViewHolder.setImageLoader(object : ItemViewHolder.ImageLoader {
             override fun image(imageView: ImageView?, resId: Int) {

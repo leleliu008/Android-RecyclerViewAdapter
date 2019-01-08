@@ -1,9 +1,10 @@
 package com.fpliu.newton.ui.recyclerview.sample
 
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.fpliu.newton.ui.base.BaseActivity
 import com.fpliu.newton.ui.recyclerview.adapter.ItemAdapter
 import com.fpliu.newton.ui.recyclerview.holder.ItemViewHolder
@@ -27,8 +28,9 @@ class MainActivity : BaseActivity() {
                 add(Pair(it, it.toString()))
             }
         }
+        recyclerView
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
             addItemDecoration(DividerItemDecoration(this@MainActivity, DividerItemDecoration.VERTICAL))
             adapter = object : ItemAdapter<Pair<Int, String>>(items) {
                 override fun onBindLayout(parent: ViewGroup, viewType: Int): Int {

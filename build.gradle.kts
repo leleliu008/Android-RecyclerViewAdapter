@@ -1,14 +1,17 @@
 buildscript {
+    val kotlinVersion = "1.3.11"
+    extra["kotlinVersion"] = kotlinVersion
+
     repositories {
         jcenter()
         google()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:3.1.4")
+        classpath("com.android.tools.build:gradle:3.2.1")
 
         //Kotlin编译的插件
         //http://kotlinlang.org/docs/reference/using-gradle.html
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.50")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }
 

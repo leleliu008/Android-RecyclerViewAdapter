@@ -30,13 +30,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion(27)
+    compileSdkVersion(28)
 
     defaultConfig {
         minSdkVersion(14)
-        targetSdkVersion(25)
+        targetSdkVersion(28)
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = "2.0.0"
     }
 
     sourceSets {
@@ -64,10 +64,9 @@ android {
 }
 
 dependencies {
-    api(fileTree(mapOf(Pair("dir", "src/main/libs"), Pair("include", "*.jar"))))
-
-    api("com.android.support:recyclerview-v7:27.1.0")
-    api("com.android.support:support-annotations:27.1.0")
+    //https://dl.google.com/dl/android/maven2/index.html
+    //https://developer.android.google.cn/reference/androidx/classes
+    api("androidx.recyclerview:recyclerview:1.0.0")
 
     //http://kotlinlang.org/docs/reference/using-gradle.html#configuring-dependencies
 //    api("org.jetbrains.kotlin:kotlin-stdlib:1.2.21")

@@ -1,9 +1,10 @@
 package com.fpliu.newton.ui.recyclerview.layout;
 
 import android.graphics.Rect;
-import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * 水平方向上进行分页的宫格布局

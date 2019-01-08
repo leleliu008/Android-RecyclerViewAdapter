@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion(27)
+    compileSdkVersion(28)
 
     defaultConfig {
-        minSdkVersion(14)
-        targetSdkVersion(25)
+        minSdkVersion(18)
+        targetSdkVersion(28)
         applicationId = "com.fpliu.newton.ui.recyclerview.sample"
         versionCode = 1
         versionName = "1.0.0"
@@ -41,14 +41,14 @@ android {
 
 dependencies {
     api(project(":library"))
+//    api("com.fpliu:Android-RecyclerViewHelper:1.0.0")
+
     //http://kotlinlang.org/docs/reference/using-gradle.html#configuring-dependencies
-    api("org.jetbrains.kotlin:kotlin-stdlib:1.2.21")
-    api("com.android.support:support-annotations:26.1.0")
-    api("com.android.support:appcompat-v7:27.1.0")
-    api("com.android.support:design:27.1.0")
-    api("com.fpliu:Android-BaseUI:1.0.0")
+    api(kotlin("stdlib", rootProject.extra["kotlinVersion"] as String))
+
+    api("com.fpliu:Android-BaseUI:2.0.0")
     api("com.fpliu:Android-CustomDimen:1.0.0")
     api("com.fpliu:Android-CustomDrawable:1.0.0")
-    api("com.fpliu:Android-RecyclerViewHelper:1.0.0")
-    api("com.fpliu:Android-List:1.0.0")
+
+//    api("com.fpliu:Android-List:1.0.0")
 }

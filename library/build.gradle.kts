@@ -36,7 +36,7 @@ android {
         minSdkVersion(14)
         targetSdkVersion(28)
         versionCode = 1
-        versionName = "2.0.0"
+        versionName = "2.0.1"
     }
 
     sourceSets {

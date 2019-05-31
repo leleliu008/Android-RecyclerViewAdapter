@@ -20,12 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
  *
  * @author 792793182@qq.com 2017-07-18.
  */
-public abstract class ItemAdapter<T> extends RecyclerView.Adapter<ItemViewHolder> implements List<T>, View.OnClickListener {
+public abstract class ItemAdapter<T> extends RecyclerView.Adapter<ItemViewHolder> implements List<T>, OnItemClickListener<T>, View.OnClickListener {
 
     //数据项集合
     private List<T> mItems;
 
-    private OnItemClickListener<T> onItemClickListener;
+    private OnItemClickListener<T> onItemClickListener = this;
 
     /**
      * 构造方法
@@ -42,7 +42,9 @@ public abstract class ItemAdapter<T> extends RecyclerView.Adapter<ItemViewHolder
     }
 
     public void setOnItemClickListener(OnItemClickListener<T> onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
+        if (onItemClickListener != null) {
+            this.onItemClickListener = onItemClickListener;
+        }
     }
 
     @Override
@@ -52,18 +54,21 @@ public abstract class ItemAdapter<T> extends RecyclerView.Adapter<ItemViewHolder
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
-        if (onItemClickListener != null) {
-            View itemView = holder.getItemView();
-            itemView.setTag(R.id.id_recycler_view_item_holder, holder);
-            itemView.setTag(R.id.id_recycler_view_item_position, position);
-            itemView.setOnClickListener(this);
-        }
+        View itemView = holder.getItemView();
+        itemView.setTag(R.id.id_recycler_view_item_holder, holder);
+        itemView.setTag(R.id.id_recycler_view_item_position, position);
+        itemView.setOnClickListener(this);
         onBindViewHolder(holder, position, getItem(position));
     }
 
     public abstract int onBindLayout(ViewGroup parent, int viewType);
 
     public abstract void onBindViewHolder(ItemViewHolder holder, int position, T item);
+
+    @Override
+    public void onItemClick(ItemViewHolder holder, int position, T item) {
+
+    }
 
     @Override
     public void onClick(View view) {
@@ -74,9 +79,7 @@ public abstract class ItemAdapter<T> extends RecyclerView.Adapter<ItemViewHolder
         ItemViewHolder holder = (ItemViewHolder) view.getTag(R.id.id_recycler_view_item_holder);
         int position = (int) positionObj;
         T item = getItem(position);
-        if (onItemClickListener != null) {
-            onItemClickListener.onItemClick(holder, position, item);
-        }
+        onItemClickListener.onItemClick(holder, position, item);
     }
 
     @Override
